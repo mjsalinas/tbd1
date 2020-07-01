@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="{% static '/css/styles.css' %}">
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+	/>
+	<link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <title>Document</title>
+  </head>
+  <body>
+  <!-- <img src=" {% static 'images/bg.jpg' %}" alt="" /> -->
+    <div class="row justify-content-center mt-5">
+      <div class="col-md-4" >
+        <div class="card pt-4"id="main-canvas" style="background-image: url({% static 'images/bg.jpg' %}); background-size: cover;
+		background-position: top center; color: white;">
+          <form action="/recibir/" method="POST" >
+            {% csrf_token %}
+						<div style="padding: 5%;">
+							<label >Crear relacion</label>
+							<div  style="margin-left: 5%;display: grid;  grid-template-columns: 120px 120px 120px 120px; column-gap: 5px;">
+							 <div>
+								<input type="radio" name="relacion" />
+							  <span class="ml-2">1:1</span>
+							</div>
+							 <div>
+							  <input type="radio" name="relacion" />
+							  <span class="ml-2">1:N</span>
+							</div>
+							<div>
+								<input type="radio" name="relacion" />
+							  <span class="ml-2">N:M</span>
+							</div>
+						  </div>
+						  <br>
+							<div >
+								<label>Para la tabla</label>
+								<select class="form-control">
+									{% if tablas %} 
+									<option> ---seleccione una tabla---</option>
+									{% for tabla in tablas %}
+									<option> {{tabla}} </option>
+									{% endfor %} {% else %}
+									<option> No hay tablas disponibles </option>
+									{% endif %}
+								</select>
+				  
+               				</div>
+							<br>
+                			<div>
+								<label>Con llave foranea</label>
+								<br>
+								<input
+								type="text"
+								placeholder="Nombre de Columna"
+								class="form-control"
+
+								/>
+							</div>
+							<br>
+							<div>
+								<label >De la tabla</label>
+								<select class="form-control">
+								{% if tablas %} 
+								<option> ---seleccione una tabla---</option>
+								{% for tabla in tablas %}
+								<option> {{tabla}} </option>
+								{% endfor %} {% else %}
+								<option> No hay tablas disponibles </option>
+								{% endif %}
+								</select>
+							</div>
+							<br>
+							<div>
+								<label >Que referencia la llave</label>
+								<input
+									type="text"
+									class="form-control"
+									placeholder="Nombre de Llave Primaria"
+								/>
+							</div>
+							<br>
+							<div>
+								<label >De la tabla</label>
+								<select class="form-control" >
+									{% if tablas %} 
+									<option> ---seleccione una tabla---</option>
+									{% for tabla in tablas %}
+									<option> {{tabla}} </option>
+									{% endfor %} {% else %}
+									<option> No hay tablas disponibles </option>
+									{% endif %}
+								</select>
+							</div>
+							<br>
+							<input id="btn" type="submit" ><span class="noselect ">
+							</span><div id="circle"></div>
+						</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

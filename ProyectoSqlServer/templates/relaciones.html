@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      {% load static %}
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="stylesheet" href="{% static '/css/styles.css' %}" />
+    </head>
+    <body>
+      
+    <div style="display: grid; grid-template-rows: auto auto;">
+      <label style="text-align: justify;">Tabla a relacionar</label>
+        <div class="tablas-llaves-relacion" style="display:grid; grid-template-columns: 180px 180px; column-gap: 10px;">
+                <select
+                  class="form-control"
+                  name="tabla1[]"
+                  id="oneOnOneTable1"
+                  onclick="filterPrimaryKeys({{llaves_tabla}}, this)"
+                >
+                    {% if tablas %}
+                    <option> --tabla--</option>
+                    {% for tabla in tablas %}
+                    <option> {{tabla}} </option>
+                    {% endfor %} {% else %}
+                    <option> No hay tablas disponibles </option>
+                    {% endif %}
+                </select>
+                <select class="form-control" name="llave1" id="oneOnOneKeys1">
+                </select>
+        </div>
+    </div>
+    <script src="{% static 'js/relaciones.js' %}"></script>
+  </body>
+</html>

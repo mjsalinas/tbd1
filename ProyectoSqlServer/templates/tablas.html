@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	{% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="{% static '/css/styles.css' %}">
+	<link rel="stylesheet" href="{% static '/css/table-buttons.css' %}">
+	<title>DB Manager</title>
+  </head>
+  <body>
+    <div class="row justify-content-center mt-5">
+        <div id="main-canvas" style="background-image: url({% static 'images/bg.jpg' %}); background-size: cover;
+		background-position: top center; color: white;">
+		<div  style="padding: 4%;">
+		 <form action="/crearTabla/" method="POST" >
+            {% csrf_token %}
+							<br>
+                			<div>
+								<label>Nombre de tabla</label>
+								<br>
+								<input
+								type="text"
+								placeholder="Nombre de Tabla"
+								class="form-control"
+								name="nombre_tabla"
+								/>
+							</div>
+							<br>
+								<label > Columnas de la tabla</label>
+								<div id="main-wrapper" style="display: grid; grid-template-rows:auto auto;">
+								<div id="main-div" style="display: grid; grid-template-columns:530px 150px;  padding-bottom: 10px;"> 
+									<div id="table-fields-ogbox" class="field-div"  style="display: grid; grid-template-columns: 80px 180px 180px 40px 220px; column-gap: 10px;">
+										<div  style="display: grid; grid-template-columns: 35px 35px; column-gap: 10px;" >
+											<div class="wrapper">
+												<input class="hidden-trigger" id="add" type="checkbox" onclick="addTableField()">
+												<label class="circle" for="add">
+												<img src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/2x/btw_ic_speeddial_white_24dp_2x.png" alt="" />
+												</label>
+											</div>
+											<div class="wrapper">
+												<input class="hidden-trigger" id="delete"  type="checkbox" onclick="removeTableField()">
+												<label class="circle" id="delete" for="delete">
+												<img src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/2x/btw_ic_speeddial_white_24dp_2x.png" alt="" />
+												</label>
+											</div>
+										</div>
+											<input
+											type="text"
+											name="nombre_columna[]"
+											placeholder="Nombre de columna"
+											class="form-control"
+											/>
+											<select class="form-control" 
+											placeholder="Tipo de dato"
+											name="tipo_dato[]"
+											>{% if tipos_dato %} 
+											<option> ---seleccione el tipo de dato---</option>
+											{% for tipo in tipos_dato %}
+											<option> {{tipo}} </option>
+											{% endfor %} {% else %}
+											<option> No hay tipos disponibles </option>
+											{% endif %} 
+											</select>
+											<input
+											type="text"
+											name="longitudCampo[]"
+											class="form-control"
+											/>
+									</div>
+									<div id = "relaciones" style=" display: grid; grid-template-rows:  20px  20px">
+										<div id="hidden-flag" style=" display: grid; grid-template-columns: 20px auto;"> 
+											<div>
+												<input type="hidden" name="relacion[]"  value="false">
+											<input type="checkbox"    onclick="handleOnClickPK(this)">
+											</div>
+											<label >PK</label>
+										</div>
+										<div id="hidden-flag" style=" display: grid; grid-template-columns: 20px auto;"> 
+											<div>
+												<input type="hidden" name="nullable[]"  value="false">
+											<input type="checkbox"   onclick="handleIsNullable(this)"  >
+											</div>
+											<label >Is Nullable</label>
+										</div>
+										<div id="hidden-flag" style=" display: none;"> 
+											<div>
+												<input type="hidden" name="foreign[]"  value="false">
+											<input type="checkbox"  onclick="handleOnClickFk(this)" >
+											</div>
+											<label >FK</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id ="new-fields-area">
+								<div>
+									<label>Crear relacion</label>
+								<div class="botones-de-relacion"  style="padding-left: 20%;display: grid;  grid-template-columns: 120px 120px 120px 120px; column-gap: 5px;"> 
+									<div>
+										<input type="radio" name="relationType" value="oneOnOne" id="oneOnOneBtn" />
+										<span class="ml-2">1:1</span>
+									</div>
+									<div>
+										<input type="radio" name="relationType" value="oneOnMany" id="oneOnManyBtn" />
+										<span class="ml-2">1:N</span>
+									</div>
+									<div>
+										<input type="radio" name="relationType" value="manyOnMany" id="manyOnManyBtn" />
+										<span class="ml-2">N:M</span>
+									</div>
+								</div>
+								</div>
+								
+								<div id="new-field" style=" display: grid; grid-template-columns:530px 150px; padding-bottom: 10px;"> 
+									<div id="relationCreator" style="display:grid; grid-template-rows: auto auto;">
+										<div id="table-fields-box" class="field-div"  style=" display: grid; grid-template-columns:80px 180px 180px 40px 220px; column-gap: 10px;">
+											<div> </div>	
+											<input
+												type="text"
+												name="nombre_columna[]"
+												placeholder="Nombre de columna"
+												class="form-control"
+												/>
+												<select class="form-control" 
+												placeholder="Tipo de dato"
+												name="tipo_dato[]"
+												>{% if tipos_dato %} 
+												<option> ---seleccione el tipo de dato---</option>
+												{% for tipo in tipos_dato %}
+												<option> {{tipo}} </option>
+												{% endfor %} {% else %}
+												<option> No hay tipos disponibles </option>
+												{% endif %} </select>
+												<input
+												type="text"
+												name="longitudCampo[]"
+												class="form-control"
+												/>
+												
+										</div>
+										<div style="display: grid; grid-template-columns: 70px auto;">
+											<div></div>
+											<div id="relacionarLlaves" style="padding: 4%; display: none; width: 500px;">
+												{% include 'relaciones.html' %}
+											</div>
+										</div>
+										
+									</div>
+
+									<div id = "relaciones" style=" display: grid; grid-template-rows:  20px 20px 20px">
+										<div id="hidden-flag" style=" display: grid; grid-template-columns: 20px auto;"> 
+											<div>
+												<input type="hidden" name="relacion[]"  value="false">
+											<input type="checkbox"  onclick="handleOnClickPK(this)">
+											</div>
+											<label >PK</label>
+										</div>
+										<div id="hidden-flag" style=" display: grid; grid-template-columns: 20px auto;"> 
+											<div>
+												<input type="hidden" name="foreign[]"  value="false">
+											<input type="checkbox"  onclick="handleOnClickFk(this)" >
+											</div>
+											<label >FK</label>
+										</div>
+										<div id="hidden-flag" style=" display: grid; grid-template-columns: 20px auto;"> 
+											<div>
+												<input type="hidden" name="nullable[]"  value="false">
+											<input type="checkbox"   onclick="handleIsNullable(this)">
+											</div>
+											<label >Is Nullable</label>
+										</div>
+									</div>
+									
+								</div>
+								</div>
+							<br>
+							<input id="btn" type="submit" value="Crear Tabla"><span class="noselect ">
+							</span><div id="circle"></div> </input>
+						</div>
+						</div>
+		  </form>
+					</div>
+	
+		</div>
+	</div>
+		
+	</div>
+	<script src="{% static 'js/tablas.js' %}"></script>
+  </body>
+</html>
